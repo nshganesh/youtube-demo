@@ -13,7 +13,6 @@ import {
   useIsMobileView,
   HEADER_OPACITY,
 } from '../../utils/utils'
-// import { TextForScrollingTest } from '../utils/TextForScrollingTest'
 
 function Header() {
   const isMobileView = useIsMobileView()
@@ -30,8 +29,6 @@ function Header() {
         </StyledAppBar>
       </HideOnScroll>
 
-      {/* Below text only to test if hiding the AppBar works */}
-      {/* <TextForScrollingTest /> */}
     </>
   )
 }

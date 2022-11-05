@@ -34,14 +34,3 @@
     background: none;
   }
 }
-
-
-.videoClassName {
-  transition: transform .2s;
-}
-
-.videoClassName:hover{
-  /* width: 500px;
-  height: 500px; */
-  /* transform: scale(1.4); */
-}

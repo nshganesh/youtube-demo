@@ -9,7 +9,6 @@ import {
   TWO_COL_MIN_WIDTH,
 } from '../../utils/utils'
 import SidebarToShow from '../Sidebar/SidebarToShow'
-import SearchPage from '../../pages/SearchPage'
 import ScrollToTop from '../ScrollToTop'
 
 const Main = () => {
@@ -43,9 +42,6 @@ const Main = () => {
               setPopularVideosNextPageToken,
             }}
           />
-        </Route>
-        <Route path='/results'>
-          <SearchPage />
         </Route>
         {/* original YouTube has a 'something went wrong' page instead of redirecting back to the homepage */}
         <Route path='*'>

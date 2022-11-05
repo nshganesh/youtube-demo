@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { request } from '../../utils/api'
 import styled from 'styled-components/macro'
 import { Typography, Avatar } from '@material-ui/core'
 import { StyledCardHeader, VideoTitle } from '../Videos/VideoCard'
@@ -15,12 +14,7 @@ const getVideoDetails = async (
   try {
     const {
       data: { items },
-    } = await request('/videos', {
-      params: {
-        part: 'contentDetails,statistics',
-        id: videoId,
-      },
-    })
+    } = {}
     durationSetterFunction(items[0].contentDetails.duration)
     viewCountSetterFunction(items[0].statistics.viewCount)
 

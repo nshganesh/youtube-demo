@@ -7,7 +7,6 @@ import {
   Divider,
 } from '@material-ui/core'
 import { PopperMenuTop } from './PopperMenuTop'
-import { PopperMenuBottom } from './PopperMenuBottom'
 
 export const DesktopPopper = ({
   isPopupOpen,
@@ -31,7 +30,6 @@ export const DesktopPopper = ({
           >
             <PopperMenuTop onClick={handlePopupClose} />
             <Divider style={{ margin: '6px 0' }} />
-            {/* <PopperMenuBottom onClick={handlePopupClose} /> */}
           </MenuList>
         </ClickAwayListener>
       </Paper>

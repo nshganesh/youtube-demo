@@ -20,7 +20,6 @@ import {
   SHOW_FULL_SIDEBAR_BREAKPOINT,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/utils'
-import countries from '../components/ChipsBar/chipsArray'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { GridItem } from '../components/Videos/GridItem'
 import { useAtom } from 'jotai'
@@ -28,10 +27,8 @@ import { userSettingToShowFullSidebarAtom } from '../store'
 import videoData from './videoData.json';
 
 const Videos = ({
-  selectedChipIndex,
   landingPageVideos,
   setLandingPageVideos,
-  popularVideosNextPageToken,
   setPopularVideosNextPageToken,
 }) => {
   const VIDEOS_PER_QUERY = 24
@@ -43,7 +40,6 @@ const Videos = ({
   // total number of videos returned by API query
   const [popularVideosTotalResults, setPopularVideosTotalResults] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  const { regionCode: selectedRegionCode } = countries[selectedChipIndex]
 
   const getPopularVideos = () => {
     try {
@@ -61,12 +57,10 @@ const Videos = ({
     }
   }
 
-  // get selectedCountry popular videos when app starts and click on another chip
   useEffect(() => {
     getPopularVideos()
-  }, [])
+  })
 
-  // determine if more query needed for infinite scroll
   let shouldGetMoreResults =
     (popularVideosTotalResults - landingPageVideos.length) / VIDEOS_PER_QUERY >=
     1
@@ -79,7 +73,6 @@ const Videos = ({
         <InnerVideoContainer>
           <InfiniteScroll
             dataLength={landingPageVideos.length}
-            next={getPopularVideos}
             hasMore={shouldGetMoreResults}
             // overflow: auto from infinite scroll default causes scrolling problem
             style={{ overflow: 'unset' }}

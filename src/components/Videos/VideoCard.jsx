@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import Card from '@material-ui/core/Card'
-import CardMedia from '@material-ui/core/CardMedia'
 import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import { Typography } from '@material-ui/core'
 import { faker } from '@faker-js/faker';
-import ReactPlayer from 'react-player'
 import HoverVideoPlayer from 'react-hover-video-player';
 
 import {
   TWO_COL_MIN_WIDTH,
-  getFormattedDurationString,
   useGetChannelDetails,
 } from '../../utils/utils'
 import { ChannelDetails } from './ChannelDetails'
-import { MoreButton } from './MoreButton'
 
 const VideoCard = ({ video }) => {
 
@@ -24,14 +20,12 @@ const VideoCard = ({ video }) => {
     personalization_id: videoId,
     thumbnail_url,
     url,
-    duration = faker.datatype.number(),
-    channelId, channelTitle, title = faker.company.name(), publishedAt = faker.random.numeric(1),
+    channelId, channelTitle, title = faker.company.name(), publishedAt = faker.date.recent(),
     viewCount = faker.datatype.number(),
   } = video
 
   const thumbnailImage = thumbnail_url
 
-  const formattedDuration = getFormattedDurationString(duration)
   const [channelAvatar, setChannelAvatar] = useState(null)
 
   // Get channelAvatar
@@ -50,9 +44,6 @@ const VideoCard = ({ video }) => {
         videoSrc={url}
         volume={1}
         muted={false}
-        className="videoClassName"
-        // videoClassName="videoClassName"
-        // hoverOverlayWrapperClassName="videoClassName"
         pausedOverlay={
           <img
             src={thumbnailImage}
@@ -66,7 +57,6 @@ const VideoCard = ({ video }) => {
           />
         }
       />
-      {/* <Thumbnail {...{ thumbnailImage, formattedDuration, url }} /> */}
 
       <StyledCardHeader
         avatar={<StyledAvatar src={channelAvatar ? channelAvatar : ''} />}
@@ -81,22 +71,6 @@ const VideoCard = ({ video }) => {
 
 export default VideoCard
 
-const Thumbnail = ({ thumbnailImage, formattedDuration, url }) => {
-  return (
-    <div>
-      {/* <ReactPlayer url={url} /> */}
-    <ImageContainer>
-      <CardMedia
-        // every video has medium size thumbnail, use as fallback if maxres not available
-        image={thumbnailImage}
-        component="img"
-        style={{ width: '100%', cursor: 'pointer' }}
-      />
-      <DurationContainer variant="body2">{formattedDuration}</DurationContainer>
-    </ImageContainer>
-    </div>
-  )
-}
 
 export const StyledIconButton = styled(IconButton)`
   && {
