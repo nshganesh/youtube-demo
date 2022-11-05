@@ -7,6 +7,9 @@ import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import { Typography } from '@material-ui/core'
 import { faker } from '@faker-js/faker';
+import ReactPlayer from 'react-player'
+import HoverVideoPlayer from 'react-hover-video-player';
+
 import {
   TWO_COL_MIN_WIDTH,
   getFormattedDurationString,
@@ -20,6 +23,7 @@ const VideoCard = ({ video }) => {
   const {
     personalization_id: videoId,
     thumbnail_url,
+    url,
     duration = faker.datatype.number(),
     channelId, channelTitle, title = faker.company.name(), publishedAt = faker.random.numeric(1),
     viewCount = faker.datatype.number(),
@@ -42,11 +46,30 @@ const VideoCard = ({ video }) => {
 
   return (
     <StyledCard square={true} elevation={0}>
-      <Thumbnail {...{ thumbnailImage, formattedDuration }} />
+      <HoverVideoPlayer
+        videoSrc={url}
+        volume={1}
+        muted={false}
+        className="videoClassName"
+        // videoClassName="videoClassName"
+        // hoverOverlayWrapperClassName="videoClassName"
+        pausedOverlay={
+          <img
+            src={thumbnailImage}
+            alt="youtube"
+            style={{
+              // Make the image expand to cover the video's dimensions
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        }
+      />
+      {/* <Thumbnail {...{ thumbnailImage, formattedDuration, url }} /> */}
 
       <StyledCardHeader
         avatar={<StyledAvatar src={channelAvatar ? channelAvatar : ''} />}
-        action={<MoreButton />}
         title={<VideoTitle variant="h3">{title}</VideoTitle>}
         subheader={
           <ChannelDetails {...{ channelTitle, publishedAt, viewCount }} />
@@ -58,8 +81,10 @@ const VideoCard = ({ video }) => {
 
 export default VideoCard
 
-const Thumbnail = ({ thumbnailImage, formattedDuration }) => {
+const Thumbnail = ({ thumbnailImage, formattedDuration, url }) => {
   return (
+    <div>
+      {/* <ReactPlayer url={url} /> */}
     <ImageContainer>
       <CardMedia
         // every video has medium size thumbnail, use as fallback if maxres not available
@@ -69,6 +94,7 @@ const Thumbnail = ({ thumbnailImage, formattedDuration }) => {
       />
       <DurationContainer variant="body2">{formattedDuration}</DurationContainer>
     </ImageContainer>
+    </div>
   )
 }
 
@@ -108,12 +134,22 @@ export const DurationContainer = styled(Typography)`
 
 const StyledCard = styled(Card)`
   && {
+    transition: transform .5s;
     width: 100%;
+    cursor: pointer;
     margin-bottom: 10px;
+    border-radius: 0px;
     @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
-      background-color: transparent;
+      border-radius: 8px;
       margin-bottom: 30px; // original is 40px but 30px here account for padding
     }
+  }
+  &:hover,
+  &:focus {
+    z-index: 1000;
+    transform: scale(1.1);
+    border: 1px solid #efefef;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   }
 `
 
@@ -161,11 +197,13 @@ export const StyledAvatar = styled(Avatar)`
     cursor: pointer;
     width: 40px;
     height: 40px;
+    margin-top: 4px;
+    margin-left: 8px;
 
     @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
       width: 36px;
       height: 36px;
-      background-color: #ef6c00;
+      background-color: #000000;
     }
   }
 `

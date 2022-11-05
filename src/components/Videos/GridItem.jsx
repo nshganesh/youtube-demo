@@ -8,7 +8,6 @@ export const GridItem = ({ video }) => {
     <Grid
       container
       item
-      // not sure if justifyContent is needed if MuiPaper-root had width: 100%, need to test
       justifyContent="center"
       xs={12}
       sm={6}

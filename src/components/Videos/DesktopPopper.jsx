@@ -31,7 +31,7 @@ export const DesktopPopper = ({
           >
             <PopperMenuTop onClick={handlePopupClose} />
             <Divider style={{ margin: '6px 0' }} />
-            <PopperMenuBottom onClick={handlePopupClose} />
+            {/* <PopperMenuBottom onClick={handlePopupClose} /> */}
           </MenuList>
         </ClickAwayListener>
       </Paper>

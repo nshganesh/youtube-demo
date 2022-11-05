@@ -85,7 +85,7 @@ const Videos = ({
             style={{ overflow: 'unset' }}
           >
             {/* change from here if remove loading-skeleton */}
-            <Grid container spacing={isMobileView ? 0 : 1}>
+            <Grid container spacing={isMobileView ? 0 : 2}>
               {isLoading
                 ? [...Array(VIDEOS_PER_QUERY)].map((_, index) => {
                     return <GridItem key={`skeleton-${index}`} />
@@ -102,7 +102,6 @@ const Videos = ({
 export default Videos
 
 export const OuterVideoContainer = styled.div`
-  background-color: #f9f9f9;
   width: 100%;
   padding-top: ${MOBILE_VIEW_HEADER_HEIGHT}px;
 
