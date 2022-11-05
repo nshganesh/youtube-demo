@@ -20,12 +20,12 @@ import {
   SHOW_FULL_SIDEBAR_BREAKPOINT,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/utils'
-import { request } from '../utils/api'
 import countries from '../components/ChipsBar/chipsArray'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { GridItem } from '../components/Videos/GridItem'
 import { useAtom } from 'jotai'
 import { userSettingToShowFullSidebarAtom } from '../store'
+import videoData from './videoData.json';
 
 const Videos = ({
   selectedChipIndex,
@@ -45,23 +45,14 @@ const Videos = ({
   const [isLoading, setIsLoading] = useState(false)
   const { regionCode: selectedRegionCode } = countries[selectedChipIndex]
 
-  const getPopularVideos = async () => {
+  const getPopularVideos = () => {
     try {
       setIsLoading(true)
-      const { data } = await request('/videos', {
-        params: {
-          part: 'snippet,contentDetails,statistics',
-          chart: 'mostPopular',
-          regionCode: selectedRegionCode,
-          maxResults: VIDEOS_PER_QUERY,
-          // initial value is null so should be fine for 1st request
-          pageToken: popularVideosNextPageToken,
-        },
-      })
-      setPopularVideosTotalResults(data.pageInfo.totalResults)
+      const data = videoData;
+      setPopularVideosTotalResults(data.length)
 
       // infinite scroll needs previous page + current page data
-      setLandingPageVideos([...landingPageVideos, ...data.items])
+      setLandingPageVideos(data)
       setPopularVideosNextPageToken(data.nextPageToken)
       setIsLoading(false)
     } catch (error) {
@@ -73,7 +64,7 @@ const Videos = ({
   // get selectedCountry popular videos when app starts and click on another chip
   useEffect(() => {
     getPopularVideos()
-  }, [selectedChipIndex])
+  }, [])
 
   // determine if more query needed for infinite scroll
   let shouldGetMoreResults =
@@ -99,9 +90,7 @@ const Videos = ({
                 ? [...Array(VIDEOS_PER_QUERY)].map((_, index) => {
                     return <GridItem key={`skeleton-${index}`} />
                   })
-                : landingPageVideos.map((video) => {
-                    return <GridItem key={video.id} video={video} />
-                  })}
+                : landingPageVideos.map((video) => <GridItem key={video.personalization_id} video={video} />)}
             </Grid>
           </InfiniteScroll>
         </InnerVideoContainer>

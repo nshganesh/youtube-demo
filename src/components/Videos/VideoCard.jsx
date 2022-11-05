@@ -6,30 +6,26 @@ import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import { Typography } from '@material-ui/core'
+import { faker } from '@faker-js/faker';
 import {
-  useIsMobileView,
   TWO_COL_MIN_WIDTH,
   getFormattedDurationString,
   useGetChannelDetails,
 } from '../../utils/utils'
-import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
 
 const VideoCard = ({ video }) => {
-  const isMobileView = useIsMobileView()
+
   const {
-    id: videoId,
-    contentDetails: { duration },
-    snippet: { channelId, channelTitle, title, publishedAt, thumbnails },
-    statistics: { viewCount },
+    personalization_id: videoId,
+    thumbnail_url,
+    duration = faker.datatype.number(),
+    channelId, channelTitle, title = faker.company.name(), publishedAt = faker.random.numeric(1),
+    viewCount = faker.datatype.number(),
   } = video
 
-  const thumbnailImage = isMobileView
-    ? thumbnails.medium.url
-    : thumbnails.maxres
-    ? thumbnails.maxres.url
-    : thumbnails.medium.url
+  const thumbnailImage = thumbnail_url
 
   const formattedDuration = getFormattedDurationString(duration)
   const [channelAvatar, setChannelAvatar] = useState(null)
@@ -51,7 +47,7 @@ const VideoCard = ({ video }) => {
       <StyledCardHeader
         avatar={<StyledAvatar src={channelAvatar ? channelAvatar : ''} />}
         action={<MoreButton />}
-        title={<VideoTitle variant="h3">{he.decode(title)}</VideoTitle>}
+        title={<VideoTitle variant="h3">{title}</VideoTitle>}
         subheader={
           <ChannelDetails {...{ channelTitle, publishedAt, viewCount }} />
         }

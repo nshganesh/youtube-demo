@@ -62,31 +62,6 @@ export const useClearSearchTerm = (history, searchTermSetterFunction) => {
   }, [history, searchTermSetterFunction])
 }
 
-// called by handleSearchFormSubmit()
-const getSearchTermVideos = async (
-  queryString,
-  searchResultsSetterFunction,
-  useLocalStorage
-) => {
-  try {
-    const { data } = await request('/search', {
-      params: {
-        part: 'snippet',
-        maxResults: 25,
-        regionCode: 'GB',
-        q: queryString,
-      },
-    })
-    if (useLocalStorage) {
-      // data contains nextPageToken and totalResults for infinite-scroll
-      // but currently not implementing infinite-scroll
-      localStorage.setItem(queryString, JSON.stringify(data))
-    }
-    searchResultsSetterFunction(data.items)
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 export const handleSearchFormSubmit = (
   event,
@@ -111,11 +86,7 @@ export const handleSearchFormSubmit = (
     searchResultsSetterFunction(storedResults.items)
   } else {
     // query API with the searchTerm
-    getSearchTermVideos(
-      queryString,
-      searchResultsSetterFunction,
-      useLocalStorage
-    )
+    
   }
   // no need to push history when reload on refresh, back, forward
   if (pushHistory) {
@@ -124,48 +95,7 @@ export const handleSearchFormSubmit = (
 }
 
 // called by useGetChannelDetails()
-const queryChannelDetails = async (
-  useLocalStorage,
-  channelAvatarSetterFunction,
-  channelInfoSetterFunction,
-  channelId,
-  videoId, // no need videoId if not using localStorage
-  isVideo
-) => {
-  try {
-    const {
-      data: { items },
-    } = await request('/channels', {
-      params: {
-        part: isVideo ? 'snippet' : 'snippet,statistics',
-        id: channelId,
-      },
-    })
 
-    if (useLocalStorage) {
-      if (isVideo) {
-        localStorage.setItem(
-          `${videoId}_channelAvatar`,
-          JSON.stringify(items[0].snippet.thumbnails.default.url)
-        )
-      } else {
-        // data is a channel instead of video
-        localStorage.setItem(
-          `${channelId}_channelInfo`,
-          JSON.stringify(items[0])
-        )
-      }
-    }
-
-    if (isVideo) {
-      channelAvatarSetterFunction(items[0].snippet.thumbnails.default.url)
-    } else {
-      channelInfoSetterFunction(items[0])
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 export const useGetChannelDetails = (
   useLocalStorage,
@@ -196,14 +126,6 @@ export const useGetChannelDetails = (
     } else if (storedChannelInfo) {
       channelInfoSetterFunction(storedChannelInfo)
     } else {
-      queryChannelDetails(
-        useLocalStorage,
-        channelAvatarSetterFunction,
-        channelInfoSetterFunction,
-        channelId,
-        videoId,
-        isVideo
-      )
     }
   }, [
     useLocalStorage,
